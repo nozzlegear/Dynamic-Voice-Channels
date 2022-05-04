@@ -14,26 +14,30 @@ Have you always wanted a fast discord bot that automatically creates new voice c
 
 **Python 3.8 or higher is required**
 
-1. Install `disnake` which can be found [here](https://github.com/Rapptz/discord.py):
+1. Use pip to restore required packages:
 ```
-pip install disnake
+pip install -r requirements.txt
 ```
-2. Install `psutil`:
+
+2. Set an environment variable named `BOT_TOKEN`:
 ```
-pip install psutil
+export BOT_TOKEN="your discord bot token here"
 ```
-3. Prepare `config.py`:
-  - replace the `TOKEN` string in start-bot.py with your bot's token
-5. Open a command line in your bot's directory and run:
+
+3. Open a command line in your bot's directory and start it with python:
 ```
 python ./start-bot.py
+```
+
+## Docker
+
+You can also run this bot from a Docker container using the included Dockerfile. You just need to set the `BOT_TOKEN` environment variable, and Docker will take care of the rest:
+
+```
+docker build -t MyDiscordBot:latest .
+docker run -it -e "BOT_TOKEN=$YOUR_DISCORD_BOT_TOKEN" MyDiscordBot:latest
 ```
 
 ## Wiki
 
 [wiki](https://github.com/Pawl-Patrol/Dynamic-Voice-Channels/wiki)
-
-## Links
-
-- [Invite Link](https://discord.com/api/oauth2/authorize?client_id=723665963123343480&permissions=286269440&scope=bot%20applications.commands)
-- Support Server (N/A)
