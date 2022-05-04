@@ -13,6 +13,38 @@ then
     exit 1
 fi
 
+# Figure out whether to use podman, docker or sudo docker to start containers
+if command -v podman;
+then
+    USE_PODMAN=1
+else 
+    USE_PODMAN=0
+
+    # Check if the user can use Docker without sudo
+    if docker ps &> /dev/null;
+    then
+        USE_SUDO_FOR_DOCKER=0
+    elif [ $(sudo docker ps &> /dev/null) ]
+    then
+        USE_SUDO_FOR_DOCKER=1
+    else
+        echo "'podman', 'docker ps' and 'sudo docker ps' commands failed to return a successful exit code. Are Podman or Docker configured properly? Do 'podman ps', 'docker ps' or 'sudo docker ps' work?" >&2
+        exit 1
+    fi
+fi
+
+pod () {
+    if [ $USE_PODMAN -eq 1 ]
+    then
+        podman $@
+    elif [ $USE_SUDO_FOR_DOCKER -eq 1 ]
+    then
+        sudo docker $@
+    else
+        docker $@
+    fi
+}
+
 IMAGE="$1"
 CONTAINER_NAME="dvc-discord-bot"
 DEPLOY_LOCATION='/var/www/discord-dynamic-voice-channels'
@@ -27,18 +59,18 @@ fi
 
 cd "$DEPLOY_LOCATION"
 
-# Update the docker image
-docker pull "$IMAGE"
+# Update the image
+pod pull "$IMAGE"
 
 # Stop and remove the container if it already exists
 if [ $(docker ps -q -f name="$CONTAINER_NAME") ]
 then
-    docker stop "$CONTAINER_NAME"
-    docker rm "$CONTAINER_NAME"
+    pod stop "$CONTAINER_NAME"
+    pod rm "$CONTAINER_NAME"
 fi
 
 # Start the container
-docker run \
+pod run \
     --restart "unless-stopped" \
     --name "$CONTAINER_NAME" \
     --volume "$VOLUME_LOCATION:/app/data" \
