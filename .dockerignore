@@ -1,0 +1,5 @@
+Dockerfile
+bot/__pycache__/
+bot/ext/__pycache__/
+bot/utils/__pycache__/
+data/
