@@ -1,12 +1,12 @@
 FROM python:3-alpine
 WORKDIR /app
 
-# Install dependencies for psutil
+# Install dependencies
 RUN apk update && apk add python3-dev gcc libffi-dev libc-dev
 
-# Restore dependencies as noted in README.md
-RUN pip3 install disnake
-RUN pip3 install psutil
+# Restore packages using pip
+COPY ./requirements.txt .
+RUN pip3 install -r ./requirements.txt
 
 # Copy source files
 COPY . .
