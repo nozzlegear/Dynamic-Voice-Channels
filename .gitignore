@@ -2,3 +2,6 @@ bot/__pycache__/
 bot/ext/__pycache__/
 bot/utils/__pycache__/
 data/
+.gitsecret/keys/random_seed
+!*.secret
+.azure/.env
