@@ -1,15 +1,35 @@
 #! /usr/bin/env bash
 
-if [ -z "$1" ] 
+printErr () {
+    RED='\033[0;31m'
+    NORMAL='\033[0m'
+
+    echo -e "${RED}$@${NORMAL}" >&2
+}
+
+IMAGE="$1"
+CONTAINER_NAME="dvc-discord-bot"
+DEPLOY_LOCATION='/var/www/discord-dynamic-voice-channels'
+ENV_FILE_LOCATION='/var/www/discord-dynamic-voice-channels/.env'
+VOLUME_LOCATION='/var/www/discord-dynamic-voice-channels/volumes/data'
+# This folder location must match the location of the bot's data folder in the Docker container
+DATA_FOLDER_LOCATION='/app/data'
+
+if [ -z "$IMAGE" ] 
 then
-    echo "No image given, cannot deploy update." >&2
+    printErr "No image given, cannot deploy update."
     echo "Usage: ./$(basename $0) example.azurecr.io/image:version"
     exit 1
 fi
 
-if [ -z "$BOT_TOKEN" ]
+if [ ! -d "$VOLUME_LOCATION" ]
 then
-    echo "Missing \$BOT_TOKEN environment variable, bot would fail to start." >&2
+    mkdir -p "$VOLUME_LOCATION" || exit 1
+fi
+
+if [ ! -f "$ENV_FILE_LOCATION" ]
+then
+    printErr "Failed to locate env file at $ENV_FILE_LOCATION, bot would fail to start."
     exit 1
 fi
 
@@ -28,7 +48,7 @@ else
     then
         USE_SUDO_FOR_DOCKER=1
     else
-        echo "'podman', 'docker ps' and 'sudo docker ps' commands failed to return a successful exit code. Are Podman or Docker configured properly? Do 'podman ps', 'docker ps' or 'sudo docker ps' work?" >&2
+        printErr "'podman', 'docker ps' and 'sudo docker ps' commands failed to return a successful exit code. Are Podman or Docker configured properly? Do 'podman ps', 'docker ps' or 'sudo docker ps' work?"
         exit 1
     fi
 fi
@@ -44,18 +64,6 @@ pod () {
         docker $@
     fi
 }
-
-IMAGE="$1"
-CONTAINER_NAME="dvc-discord-bot"
-DEPLOY_LOCATION='/var/www/discord-dynamic-voice-channels'
-VOLUME_LOCATION='/var/www/discord-dynamic-voice-channels/volumes/data'
-# This folder location must match the location of the bot's data folder in the Docker container
-DATA_FOLDER_LOCATION='/app/data'
-
-if [ ! -d "$VOLUME_LOCATION" ]
-then
-    mkdir -p "$VOLUME_LOCATION" || exit 1
-fi
 
 cd "$DEPLOY_LOCATION"
 
@@ -74,6 +82,6 @@ pod run \
     --restart "unless-stopped" \
     --name "$CONTAINER_NAME" \
     --volume "$VOLUME_LOCATION:/app/data" \
-    -e "BOT_TOKEN=$BOT_TOKEN" \
+    --env-file "$ENV_FILE_LOCATION" \
     -itd \
     "$IMAGE"
