@@ -1,5 +1,8 @@
 #! /usr/bin/env bash
 
+# Exit when any command fails
+set -e
+
 LOG_FILE="/var/log/discord-dynamic-voice-channels.log"
 
 printErr () {
