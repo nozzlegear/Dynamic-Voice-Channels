@@ -68,16 +68,19 @@ pod () {
 cd "$DEPLOY_LOCATION"
 
 # Update the image
+echo "Pulling image $IMAGE..."
 pod pull "$IMAGE"
 
 # Stop and remove the container if it already exists
 if [ $(docker ps -q -f name="$CONTAINER_NAME") ]
 then
+    echo "Stopping and removing existing container \"$CONTAINER_NAME\"..."
     pod stop "$CONTAINER_NAME"
     pod rm "$CONTAINER_NAME"
 fi
 
 # Start the container
+echo "Starting container..."
 pod run \
     --restart "unless-stopped" \
     --name "$CONTAINER_NAME" \
@@ -85,3 +88,5 @@ pod run \
     --env-file "$ENV_FILE_LOCATION" \
     -itd \
     "$IMAGE"
+
+echo "Done!"
