@@ -1,10 +1,19 @@
 #! /usr/bin/env bash
 
+LOG_FILE="/var/log/discord-dynamic-voice-channels.log"
+
 printErr () {
     RED='\033[0;31m'
     NORMAL='\033[0m'
 
     echo -e "${RED}$@${NORMAL}" >&2
+}
+
+log () {
+    timestamp=$(date -u "+%F T%TZ")
+    echo "[$timestamp]: $@" > "$LOG_FILE"
+    # Also echo back to the console
+    echo "$@"
 }
 
 IMAGE="$1"
@@ -68,19 +77,19 @@ pod () {
 cd "$DEPLOY_LOCATION"
 
 # Update the image
-echo "Pulling image $IMAGE..."
+log "Pulling image $IMAGE..."
 pod pull "$IMAGE"
 
 # Stop and remove the container if it already exists
 if [ $(docker ps -q -f name="$CONTAINER_NAME") ]
 then
-    echo "Stopping and removing existing container \"$CONTAINER_NAME\"..."
+    log "Stopping and removing existing container \"$CONTAINER_NAME\"..."
     pod stop "$CONTAINER_NAME"
     pod rm "$CONTAINER_NAME"
 fi
 
 # Start the container
-echo "Starting container..."
+log "Starting container..."
 pod run \
     --restart "unless-stopped" \
     --name "$CONTAINER_NAME" \
@@ -89,4 +98,4 @@ pod run \
     -itd \
     "$IMAGE"
 
-echo "Done!"
+log "Done!"
