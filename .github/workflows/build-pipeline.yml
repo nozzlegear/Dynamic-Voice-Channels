@@ -53,7 +53,7 @@ jobs:
         # Use a host fingerprint to ensure we always connect to the same server
         #fingerprint: ${{ secrets.CRYPTUM_HOST_FINGERPRINT }}
         source: ".github/scripts/cryptum-deployment.sh"
-        target: "/etc/deployments/cryptum-deployment.sh"
+        target: "/etc/deployments"
         overwrite: true
 
     - name: Execute deployment script via SSH
