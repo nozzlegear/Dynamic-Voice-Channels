@@ -69,4 +69,4 @@ jobs:
         #fingerprint: ${{ secrets.CRYPTUM_HOST_FINGERPRINT }}
         # Stop on errors
         script_stop: true
-        script: bash -C "~/deployments/cryptum-deployment.sh" "$BUILD_IMAGE_NAME"
+        script: bash -C "$HOME/deployments/cryptum-deployment.sh" "$BUILD_IMAGE_NAME"
