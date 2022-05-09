@@ -15,7 +15,7 @@ jobs:
     - name: Debug env
       env:
         ACR_REGISTRY: ${{ secrets.ACR_REGISTRY }}
-      run: if [ ! -z "$ACR_REGISTRY" ]; then echo "ACR_REGISTRY exists, can be used"; else echo "ACR_REGISTRY not found, cannot be used"; fi;
+      run: env
 
     - name: Log in to Azure Container Registry
       env:
