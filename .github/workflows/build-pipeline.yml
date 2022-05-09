@@ -11,7 +11,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-20.04
-    environment: build
+    environment: "Build Environment"
 
     steps:
 
