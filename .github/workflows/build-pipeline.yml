@@ -30,3 +30,39 @@ jobs:
 
     - name: Push container image
       run: docker push "$BUILD_IMAGE_NAME" && docker push "$LATEST_IMAGE_NAME"
+
+  deploy:
+    name: "Deploy to Cryptum"
+    runs-on: ubuntu-20.04
+    environment: "Cryptum Deployment Environment"
+    # Do not run this job until the build job completes
+    needs: build
+
+    steps:
+    - name: Checkout branch
+      uses: actions/checkout@master
+
+    - name: Copy deployment script to Cryptum
+      uses: appleboy/scp-action@master
+      with:
+        key: ${{ secrets.CRYPTUM_PRIVATE_KEY }}
+        host: ${{ secrets.CRYPTUM_HOST }}
+        username: ${{ secrets.CRYPTUM_USERNAME }}
+        passphrase: ${{ secrets.CRYPTUM_SSH_PASSPHRASE }}
+        # Use a host fingerprint to ensure we always connect to the same server
+        fingerprint: ${{ secrets.CRYPTUM_HOST_FINGERPRINT }}
+        source: ".github/scripts/cryptum-deployment.sh"
+        target: "/etc/deployments/cryptum-deployment.sh"
+        overwrite: true
+
+    - name: Execute deployment script via SSH
+      uses: appleboy/ssh-action@master
+      with:
+        key: ${{ secrets.CRYPTUM_PRIVATE_KEY }}
+        host: ${{ secrets.CRYPTUM_HOST }}
+        username: ${{ secrets.CRYPTUM_USERNAME }}
+        passphrase: ${{ secrets.CRYPTUM_SSH_PASSPHRASE }}
+        fingerprint: ${{ secrets.CRYPTUM_HOST_FINGERPRINT }}
+        # Stop on errors
+        script_stop: true
+        script: bash -C "/etc/deployments/cryptum-deployment.sh" "$BUILD_IMAGE_NAME"
