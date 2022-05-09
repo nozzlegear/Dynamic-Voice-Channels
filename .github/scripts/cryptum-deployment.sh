@@ -14,7 +14,7 @@ printErr () {
 
 log () {
     timestamp=$(date -u "+%F T%TZ")
-    echo "[$timestamp]: $@" > "$LOG_FILE"
+    echo "[$timestamp]: $@" >> "$LOG_FILE"
     # Also echo back to the console
     echo "$@"
 }
