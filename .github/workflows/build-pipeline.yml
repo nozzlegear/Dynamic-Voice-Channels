@@ -23,7 +23,9 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Build container image
-      run: docker build -t "${{ secrets.ACR_REGISTRY }}/$BUILD_IMAGE_NAME" -t "${{ secrets.ACR_REGISTRY }}/$LATEST_IMAGE_NAME" .
+      env:
+        ACR_REGISTRY: ${{ secrets.ACR_REGISTRY }}
+      run: docker build -t "$ACR_REGISTRY/$BUILD_IMAGE_NAME" -t "$ACR_REGISTRY/$LATEST_IMAGE_NAME" .
 
     #- name: Push container image
     #  run: docker push "$BUILD_IMAGE_NAME"
