@@ -54,6 +54,8 @@ jobs:
         #fingerprint: ${{ secrets.CRYPTUM_HOST_FINGERPRINT }}
         source: ".github/scripts/cryptum-deployment.sh"
         target: "~/deployments"
+        # Strip the first two folder names from the deployed file (e.g. remove `.github/scripts`)
+        strip_components: 2
         overwrite: true
 
     - name: Execute deployment script via SSH
