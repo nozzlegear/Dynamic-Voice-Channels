@@ -6,8 +6,8 @@ on:
 
 env:
   IMAGE_NAME: "${{ secrets.ACR_REGISTRY }}/discord-dynamic-voice-channels"
-  BUILD_IMAGE_NAME: "$IMAGE_NAME:$GITHUB_RUN_NUMBER"
-  LATEST_IMAGE_NAME: "$IMAGE_NAME:latest"
+  BUILD_IMAGE_NAME: "${{ env.IMAGE_NAME }}:$GITHUB_RUN_NUMBER"
+  LATEST_IMAGE_NAME: "${{ env.IMAGE_NAME }}:latest"
 
 jobs:
   build:
