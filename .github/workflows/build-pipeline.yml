@@ -5,7 +5,7 @@ on:
     branches: [ $default-branch, actions-test ]
 
 env:
-  BUILD_IMAGE_NAME: "${{ secrets.ACR_REGISTRY }}/discord-dynamic-voice-channels:$GITHUB_RUN_NUMBER"
+  BUILD_IMAGE_NAME: "${{ secrets.ACR_REGISTRY }}/discord-dynamic-voice-channels:${{ github.run_number }}"
   LATEST_IMAGE_NAME: "${{ secrets.ACR_REGISTRY }}/discord-dynamic-voice-channels:latest"
 jobs:
   build:
