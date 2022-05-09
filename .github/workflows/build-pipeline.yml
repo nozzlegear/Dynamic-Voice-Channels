@@ -7,11 +7,19 @@ on:
 env:
   BUILD_IMAGE_NAME: "discord-dynamic-voice-channels:${{ github.run_number }}"
   LATEST_IMAGE_NAME: "discord-dynamic-voice-channels:latest"
+
 jobs:
   build:
     runs-on: ubuntu-20.04
 
     steps:
+
+    - shell: bash
+      env:
+        SUPER_SECRET: ${{ secrets.SuperSecret }}
+      run: |
+        if [ -z "$SUPER_SECRET" ]; then echo "SUPER_SECRET is empty"; else echo "SUPER_SECRET is not empty"; fi
+
     - name: Debug env
       env:
         ACR_REGISTRY: ${{ secrets.ACR_REGISTRY }}
