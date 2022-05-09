@@ -25,5 +25,5 @@ jobs:
     - name: Build container image
       run: docker build -t "$BUILD_IMAGE_NAME" -t "$LATEST_IMAGE_NAME" .
 
-    - name: Push container image
-      run: docker push "$BUILD_IMAGE_NAME"
+    #- name: Push container image
+    #  run: docker push "$BUILD_IMAGE_NAME"
