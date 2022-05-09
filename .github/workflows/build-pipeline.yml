@@ -2,7 +2,7 @@ name: Build Pipeline
 
 on:
   push:
-    branches: [ $default-branch ]
+    branches: [ master ]
 
 env:
   BUILD_IMAGE_NAME: "${{ secrets.ACR_REGISTRY }}/discord-dynamic-voice-channels:${{ github.run_number }}"
