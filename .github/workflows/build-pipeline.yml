@@ -1,0 +1,31 @@
+name: $(date:yyyy-MM-dd)_$(rev:.r)
+
+on:
+  push:
+    branches: [ $default-branch, actions-test ]
+
+env:
+  IMAGE_NAME: "${{ secrets.ACR_REGISTRY }}/discord-dynamic-voice-channels"
+  BUILD_IMAGE_NAME: "$IMAGE_NAME:$GITHUB_RUN_NUMBER"
+  LATEST_IMAGE_NAME: "$IMAGE_NAME:latest"
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Log in to Azure Container Registry
+      env:
+        ACR_REGISTRY: ${{ secrets.ACR_REGISTRY }}
+        ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
+        ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
+      run: docker login --username "$ACR_USERNAME" --password "$ACR_PASSWORD" "$ACR_REGISTRY"
+
+    - name: Checkout branch
+      uses: actions/checkout@v3
+
+    - name: Build container image
+      run: docker build -t "$BUILD_IMAGE_NAME" -t "$LATEST_IMAGE_NAME" .
+
+    - name: Push container image
+      run: docker push "$BUILD_IMAGE_NAME"
