@@ -12,6 +12,11 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+    - name: Debug env
+      env:
+        ACR_REGISTRY: ${{ secrets.ACR_REGISTRY }}
+      run: if [ ! -z "$ACR_REGISTRY" ]; then echo "ACR_REGISTRY exists, can be used"; else echo "ACR_REGISTRY not found, cannot be used"; fi;
+
     - name: Log in to Azure Container Registry
       env:
         ACR_REGISTRY: ${{ secrets.ACR_REGISTRY }}
