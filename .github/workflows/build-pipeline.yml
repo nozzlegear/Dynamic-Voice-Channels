@@ -45,9 +45,10 @@ jobs:
     - name: Copy deployment script to Cryptum
       uses: appleboy/scp-action@master
       with:
-        key: ${{ secrets.CRYPTUM_PRIVATE_KEY }}
         host: ${{ secrets.CRYPTUM_HOST }}
+        port: 22
         username: ${{ secrets.CRYPTUM_USERNAME }}
+        key: ${{ secrets.CRYPTUM_PRIVATE_KEY }}
         passphrase: ${{ secrets.CRYPTUM_SSH_PASSPHRASE }}
         # Use a host fingerprint to ensure we always connect to the same server
         #fingerprint: ${{ secrets.CRYPTUM_HOST_FINGERPRINT }}
@@ -58,9 +59,10 @@ jobs:
     - name: Execute deployment script via SSH
       uses: appleboy/ssh-action@master
       with:
-        key: ${{ secrets.CRYPTUM_PRIVATE_KEY }}
         host: ${{ secrets.CRYPTUM_HOST }}
+        port: 22
         username: ${{ secrets.CRYPTUM_USERNAME }}
+        key: ${{ secrets.CRYPTUM_PRIVATE_KEY }}
         passphrase: ${{ secrets.CRYPTUM_SSH_PASSPHRASE }}
         #fingerprint: ${{ secrets.CRYPTUM_HOST_FINGERPRINT }}
         # Stop on errors
