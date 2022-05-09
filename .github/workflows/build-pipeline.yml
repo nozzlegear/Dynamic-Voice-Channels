@@ -19,7 +19,7 @@ jobs:
       env:
         ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
         ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
-      run: docker login --username "$ACR_USERNAME" --password "$ACR_PASSWORD" "$ACR_REGISTRY"
+      run: echo "$ACR_PASSWORD" | docker login --password-stdin --username "$ACR_USERNAME" "$ACR_REGISTRY"
 
     - name: Checkout branch
       uses: actions/checkout@v3
