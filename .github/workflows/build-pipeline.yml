@@ -5,6 +5,7 @@ on:
     branches: [ $default-branch, actions-test ]
 
 env:
+  ACR_REGISTRY: "${{ secrets.ACR_REGISTRY }}"
   BUILD_IMAGE_NAME: "discord-dynamic-voice-channels:${{ github.run_number }}"
   LATEST_IMAGE_NAME: "discord-dynamic-voice-channels:latest"
 
@@ -14,21 +15,8 @@ jobs:
     environment: "Build Environment"
 
     steps:
-
-    - shell: bash
-      env:
-        SUPER_SECRET: ${{ secrets.SuperSecret }}
-      run: |
-        if [ -z "$SUPER_SECRET" ]; then echo "SUPER_SECRET is empty"; else echo "SUPER_SECRET is not empty"; fi
-
-    - name: Debug env
-      env:
-        ACR_REGISTRY: ${{ secrets.ACR_REGISTRY }}
-      run: env
-
     - name: Log in to Azure Container Registry
       env:
-        ACR_REGISTRY: ${{ secrets.ACR_REGISTRY }}
         ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
         ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
       run: docker login --username "$ACR_USERNAME" --password "$ACR_PASSWORD" "$ACR_REGISTRY"
@@ -37,8 +25,6 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Build container image
-      env:
-        ACR_REGISTRY: ${{ secrets.ACR_REGISTRY }}
       run: docker build -t "$ACR_REGISTRY/$BUILD_IMAGE_NAME" -t "$ACR_REGISTRY/$LATEST_IMAGE_NAME" .
 
     #- name: Push container image
