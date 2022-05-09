@@ -50,7 +50,7 @@ jobs:
         username: ${{ secrets.CRYPTUM_USERNAME }}
         passphrase: ${{ secrets.CRYPTUM_SSH_PASSPHRASE }}
         # Use a host fingerprint to ensure we always connect to the same server
-        fingerprint: ${{ secrets.CRYPTUM_HOST_FINGERPRINT }}
+        #fingerprint: ${{ secrets.CRYPTUM_HOST_FINGERPRINT }}
         source: ".github/scripts/cryptum-deployment.sh"
         target: "/etc/deployments/cryptum-deployment.sh"
         overwrite: true
@@ -62,7 +62,7 @@ jobs:
         host: ${{ secrets.CRYPTUM_HOST }}
         username: ${{ secrets.CRYPTUM_USERNAME }}
         passphrase: ${{ secrets.CRYPTUM_SSH_PASSPHRASE }}
-        fingerprint: ${{ secrets.CRYPTUM_HOST_FINGERPRINT }}
+        #fingerprint: ${{ secrets.CRYPTUM_HOST_FINGERPRINT }}
         # Stop on errors
         script_stop: true
         script: bash -C "/etc/deployments/cryptum-deployment.sh" "$BUILD_IMAGE_NAME"
