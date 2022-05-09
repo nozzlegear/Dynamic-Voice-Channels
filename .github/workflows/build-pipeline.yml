@@ -10,7 +10,7 @@ env:
   LATEST_IMAGE_NAME: "discord-dynamic-voice-channels:latest"
 
 jobs:
-  build:
+  "Build and push":
     runs-on: ubuntu-20.04
     environment: "Build Environment"
 
