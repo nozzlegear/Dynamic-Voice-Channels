@@ -28,5 +28,5 @@ jobs:
     - name: Build container image
       run: docker build -t "$ACR_REGISTRY/$BUILD_IMAGE_NAME" -t "$ACR_REGISTRY/$LATEST_IMAGE_NAME" .
 
-    #- name: Push container image
-    #  run: docker push "$BUILD_IMAGE_NAME"
+    - name: Push container image
+      run: docker push --all-tags "$BUILD_IMAGE_NAME"
