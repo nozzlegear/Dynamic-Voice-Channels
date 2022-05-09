@@ -84,11 +84,13 @@ log "Pulling image $IMAGE..."
 pod pull "$IMAGE"
 
 # Stop and remove the container if it already exists
-if [ $(pod ps -q -f name="$CONTAINER_NAME") ]
+EXISTING_CONTAINER_ID=$(pod ps --all -q -f name="$CONTAINER_NAME")
+
+if [ ! -z "$EXISTING_CONTAINER_ID" ]
 then
     log "Stopping and removing existing container \"$CONTAINER_NAME\"..."
-    pod stop "$CONTAINER_NAME"
-    pod rm "$CONTAINER_NAME"
+    pod stop "$EXISTING_CONTAINER_ID"
+    pod rm "$EXISTING_CONTAINER_ID"
 fi
 
 # Start the container
