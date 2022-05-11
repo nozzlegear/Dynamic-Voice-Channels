@@ -96,7 +96,7 @@ fi
 # Start the container
 log "Starting container..."
 pod run \
-    --restart "unless-stopped" \
+    --restart "always" \
     --name "$CONTAINER_NAME" \
     --volume "$VOLUME_LOCATION:/app/data" \
     --env-file "$ENV_FILE_LOCATION" \
